@@ -29,9 +29,16 @@ export default function Download() {
 
           <div id="qr" className="flex items-center justify-center">
             <div className="rounded-2xl bg-white p-4 shadow-lg">
-              <div className="h-44 w-44 bg-[radial-gradient(theme(colors.zinc.800)_20%,transparent_21%)] [background-size:8px_8px]" />
-              <p className="mt-2 text-center text-xs text-purple-700">QR de Expo Go (placeholder)</p>
+              <img
+                src="./QR.png"
+                alt="QR de Expo Go"
+                className="h-44 w-44 rounded-lg object-contain"
+              />
+              <p className="mt-2 text-center text-xs text-purple-700">
+                QR de Expo Go
+              </p>
             </div>
+
           </div>
         </div>
       </div>
