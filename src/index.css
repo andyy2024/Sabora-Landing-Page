@@ -1,0 +1,10 @@
+/* src/index.css */
+@import "tailwindcss";
+
+/* Opcional: tokens rápidos para tema */
+:root {
+  --brand: 124 58 237;    /* purple-600 */
+  --brand-600: 124 58 237;
+  --brand-700: 109 40 217;
+  --brand-100: 237 233 254;
+}
