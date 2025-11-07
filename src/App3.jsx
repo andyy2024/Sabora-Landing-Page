@@ -7,6 +7,7 @@ import HowItWorks from "./components/HowItWorks";
 import Download from "./components/Download";
 import FAQ from "./components/FAQ";
 import Footer from "./components/Footer";
+import Waitlist from "./components/Waitlist";
 
 export default function App() {
   return (
@@ -17,6 +18,7 @@ export default function App() {
         <Features />
         <Trust />
         <HowItWorks />
+        <Waitlist />
         <Download />
         <FAQ />
       </main>
