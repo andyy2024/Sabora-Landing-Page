@@ -17,10 +17,11 @@ export default function Waitlist() {
     setErrorMsg("");
 
     try {
-      const res = await fetch("https://script.google.com/macros/s/AKfycbzPBFr00aUuWPq-GeQHpWh9BDyP3w4BoY4q4mOcfXo/dev", {
+      const res = await fetch("https://script.google.com/macros/s/AKfycby3FqTO65W3eejV-ghmKsjZotUJJuhlo7FVvDu75wugPxIgSdCDYqbQmwpiBibnLZWD/exec", {
         method: "POST",
         body: JSON.stringify({ name, email }),
         headers: { "Content-Type": "application/json" },
+        mode: "no-cors"
       });
 
     //   if (!res.ok) {
@@ -31,12 +32,10 @@ export default function Waitlist() {
       setName("");
       setEmail("");
     } catch (err: any) {
-    //   setStatus("error");
-    //   setErrorMsg(err?.message || "No se pudo enviar. Intenta de nuevo.");
 
-      setStatus("success");
-      setName("");
-      setEmail("");
+      setStatus("error");
+      setErrorMsg(err?.message || "No se pudo enviar. Intenta de nuevo.");
+
     } finally {
       // opcional: telemetry simple
     }
