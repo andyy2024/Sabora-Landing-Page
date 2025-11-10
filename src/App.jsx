@@ -22,7 +22,7 @@ export default function App() {
           className="min-h-screen" // make sure it fills the page
         >
           <Hero />
-        <div className="bg-gradient-to-b from-rose-50 to-amber-50">
+        <div className="bg-gradient-to-b from-white to-amber-50">
           <Features />
         </div>
         <div className="bg-gradient-to-b from-amber-50 to-pink-100">
