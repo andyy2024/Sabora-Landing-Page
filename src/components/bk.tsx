@@ -1,113 +1,172 @@
-import React from "react";
+import React, { CSSProperties, useId, useMemo } from "react";
 
-/**
- * CakePatternBackground.jsx
- * A full-bleed, seamless repeating cake pattern background component for web (React + Tailwind 4).
- *
- * Features:
- * - Uses an inline SVG <pattern> so the tiles are perfectly seamless and crisp.
- * - Exposes props to control tile size, spacing, colors, rotation and opacity.
- * - Meant to be used as a background that occupies all available space (absolute/fixed or as a block).
- * - No external libs required; works with Tailwind 4 utilities.
- *
- * Usage example:
- * <div className="relative min-h-screen">
- *   <CakePatternBackground />
- *   <main className="relative z-10">...page content...</main>
- * </div>
- *
- */
+type Palette = {
+  frosting?: string;      // glaseado
+  base?: string;          // base (capacillo)
+  baseRidge?: string;     // líneas del capacillo
+  outline?: string;       // contorno/fino
+  sprinkles?: string[];   // colores de chispas
+  background?: string;    // fondo del azulejo
+  shadow?: string;        // sombra bajo el cupcake
+};
 
-export default function CakePatternBackground({
-  tileSize = 160, // size of one tile in px (controls spacing)
-  scale = 1, // overall scale of the pattern
-  rotate = 0, // global rotation of the whole svg (deg)
-  primaryColor = "#FFD9E6", // cake body
-  frostingColor = "#FFF5F8", // frosting
-  cherryColor = "#E11D48", // cherry
-  sprinkleColor = "#F59E0B", // small accent
-  opacity = 0.95, // pattern opacity
-  className = "",
+type Props = {
+  className?: string;
+  tileSize?: number; // px
+  scale?: number;    // escala del contenido en el azulejo
+  palette?: Palette;
+  opacity?: number;
+  children?: React.ReactNode;
+  style?: CSSProperties;
+};
+
+export default function CupcakePatternBackground({
+  className = "min-h-screen w-full",
+  tileSize = 200,
+  scale = 1,
+  palette = {},
+  opacity = 1,
   children,
-}) {
-  // tile viewBox will be tileSize x tileSize
-  const s = Math.max(40, tileSize); // minimum tile size
-  const patternId = "cakePattern";
-  const viewBox = `0 0 ${s} ${s}`;
+  style = {},
+}: Props) {
+  const rawId = useId();
+  const patternId = `cupcake-pattern-${rawId.replace(/[:]/g, "")}`;
 
-  // helper to position cake centered in tile
-  const cakeGroup = (
-    <g transform={`translate(${s / 2}, ${s / 2}) scale(${scale})`}>
-      {/* simple stylized cake icon (keeps path data compact) */}
-      <g transform="translate(-32,-32) scale(0.8)">
-        {/* plate */}
-        <ellipse cx="32" cy="58" rx="30" ry="6" fill="#F3F4F6" opacity="0.7" />
-        {/* cake body */}
-        <rect x="8" y="24" width="48" height="28" rx="6" fill={primaryColor} stroke="#0000000f" />
-        {/* frosting drip */}
-        <path d="M8 28 C14 40, 20 28, 26 34 C32 40, 38 28, 44 34 C50 40, 56 28, 56 28 L56 44 L8 44 Z" fill={frostingColor} />
-        {/* sprinkles */}
-        <g>
-          <rect x="18" y="34" width="2" height="6" rx="1" transform="rotate(-20 19 37)" fill={sprinkleColor} />
-          <rect x="26" y="36" width="2" height="5" rx="1" transform="rotate(10 27 38)" fill="#60A5FA" />
-          <rect x="36" y="34" width="2" height="6" rx="1" transform="rotate(30 37 37)" fill="#34D399" />
-        </g>
-        {/* cherry */}
-        <g>
-          <circle cx="40" cy="18" r="6" fill={cherryColor} stroke="#00000020" />
-          <path d="M40 12 C40 8, 45 6, 48 10" stroke="#065F46" strokeWidth="1" fill="none" strokeLinecap="round" />
-        </g>
-      </g>
-    </g>
+  const colors: Required<Palette> = {
+    frosting: "#c9a7ff",            // lila claro
+    base: "#6f3bd6",                // morado oscuro
+    baseRidge: "#5a2fb0",           // líneas del capacillo
+    outline: "rgba(0,0,0,0.12)",    // contorno suave
+    sprinkles: ["#ff5f6d", "#ffd166", "#06d6a0", "#118ab2", "#f78c6b", "#e9ff70"],
+    background: "transparent",      // deja transparente para superponer
+    shadow: "rgba(0,0,0,0.08)",
+    ...palette,
+  };
+
+  // Escala para mantener proporciones cuando cambie tileSize y/o scale
+  const s = (tileSize / 200) * scale;
+
+  // Posiciones determinísticas de chispas dentro del glaseado (coordenadas 200x200)
+  const sprinkles = useMemo(
+    () =>
+      [
+        { x: 84, y: 60, w: 12, h: 3, r: 20 },
+        { x: 106, y: 58, w: 10, h: 3, r: -25 },
+        { x: 94, y: 70, w: 8, h: 3, r: 35 },
+        { x: 118, y: 72, w: 12, h: 3, r: -10 },
+        { x: 76, y: 78, w: 9, h: 3, r: 15 },
+        { x: 130, y: 88, w: 8, h: 3, r: -35 },
+        { x: 98, y: 86, w: 10, h: 3, r: 12 },
+        { x: 112, y: 64, w: 8, h: 3, r: 55 },
+        { x: 86, y: 92, w: 8, h: 3, r: -18 },
+        { x: 120, y: 98, w: 10, h: 3, r: 28 },
+      ].map((sp, i) => ({
+        ...sp,
+        color: colors.sprinkles[i % colors.sprinkles.length],
+      })),
+    [colors.sprinkles]
   );
 
   return (
-    <div
-      aria-hidden
-      className={`absolute inset-0 -z-10 overflow-hidden ${className}`}
-      style={{ opacity }}
-    >
+    <div className={`relative ${className}`} style={style}>
       <svg
-        className="w-full h-full"
-        preserveAspectRatio="xMidYMid slice"
-        viewBox={viewBox}
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 h-full w-full"
+        width="100%"
+        height="100%"
         xmlns="http://www.w3.org/2000/svg"
-        style={{ transform: `rotate(${rotate}deg)` }}
       >
         <defs>
           <pattern
             id={patternId}
+            width={tileSize}
+            height={tileSize}
             x="0"
             y="0"
-            width={s}
-            height={s}
             patternUnits="userSpaceOnUse"
-            patternTransform={`scale(1)`}
+            patternContentUnits="userSpaceOnUse"
           >
-            {/* background tile color (optional subtle paper texture) */}
-            <rect x="0" y="0" width={s} height={s} fill="#FEFEFE" />
+            {/* Fondo del azulejo */}
+            <rect x="0" y="0" width={tileSize} height={tileSize} fill={colors.background} />
 
-            {/* place a slightly translated/offset cake in the tile center for better tiling */}
-            <g>
-              {cakeGroup}
-            </g>
+            {/* Cupcake centrado en un sistema 200x200 y escalado a la baldosa */}
+            <g transform={`translate(${tileSize / 2}, ${tileSize / 2}) scale(${s}) translate(-100, -100)`} opacity={opacity}>
+              {/* Sombra */}
+              <ellipse cx="100" cy="168" rx="42" ry="8" fill={colors.shadow} />
 
-            {/* we sometimes want a second, offset cake to make tiling less grid-like —
-                we draw a second copy displaced by half a tile so the tiling feels staggered */}
-            <g transform={`translate(${s / 2}, ${s / 2})`}>
-              {cakeGroup}
+              {/* Glaseado (forma orgánica) */}
+              <path
+                d="
+                  M 100 42
+                  c 22 0 28 14 30 20
+                  c 16 2 28 16 18 30
+                  c 8 14 -8 28 -46 28
+                  c -40 0 -56 -16 -42 -34
+                  c -18 -8 -10 -34 14 -36
+                  c 4 -10 22 -18 26 -8
+                  c 2 -6 8 -10 14 -10
+                  z
+                "
+                fill={colors.frosting}
+                stroke={colors.outline}
+                strokeWidth="1.5"
+              />
+
+              {/* Chispas */}
+              {sprinkles.map((sp, idx) => (
+                <rect
+                  key={idx}
+                  x={sp.x}
+                  y={sp.y}
+                  width={sp.w}
+                  height={sp.h}
+                  rx={sp.h / 2}
+                  ry={sp.h / 2}
+                  fill={sp.color}
+                  transform={`rotate(${sp.r}, ${sp.x + sp.w / 2}, ${sp.y + sp.h / 2})`}
+                />
+              ))}
+
+              {/* Base (capacillo) */}
+              <polygon
+                points="62,118 138,118 126,166 74,166"
+                fill={colors.base}
+                stroke={colors.outline}
+                strokeWidth="1.25"
+              />
+              {/* Pliegues del capacillo */}
+              {[72, 82, 92, 102, 112, 122].map((x, i) => (
+                <line
+                  key={i}
+                  x1={x}
+                  y1={120}
+                  x2={x - 4}
+                  y2={166}
+                  stroke={colors.baseRidge}
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  opacity="0.8"
+                />
+              ))}
+              {/* Borde superior del capacillo */}
+              <path
+                d="M62 118 Q100 110 138 118"
+                fill="none"
+                stroke={colors.baseRidge}
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                opacity="0.9"
+              />
             </g>
           </pattern>
         </defs>
 
-        {/* big rect that fills the SVG and uses the pattern */}
+        {/* Pintar el patrón en todo el lienzo */}
         <rect x="0" y="0" width="100%" height="100%" fill={`url(#${patternId})`} />
       </svg>
 
-      {/* optional children overlay if user passes content (keeps them visually on top)
-          Note: children will be positioned after the pattern but inside this component's DOM.
-          If you want children to be interactive above other content, ensure you set z-index accordingly. */}
-      {children ? <div className="pointer-events-none">{children}</div> : null}
+      {/* Contenido superpuesto */}
+      <div className="relative z-10">{children}</div>
     </div>
   );
 }

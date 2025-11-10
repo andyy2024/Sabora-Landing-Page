@@ -8,3 +8,11 @@
   --brand-700: 109 40 217;
   --brand-100: 237 233 254;
 }
+
+/* In globals.css */
+.blur-fade {
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  mask-image: radial-gradient(circle at center, black 60%, transparent 100%);
+  -webkit-mask-image: radial-gradient(circle at center, black 60%, transparent 100%);
+}

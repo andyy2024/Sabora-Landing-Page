@@ -35,7 +35,11 @@ export default function Features() {
 
       <div className="mt-14 grid md:grid-cols-2 gap-10 items-start">
         <PhoneMock label="Mockup: Buscador">
-          <SearchPlaceholder />
+          <img
+              src={"./mockup3.jpg"}
+              alt="App screenshot"
+              className="w-full h-full object-fill rounded-[32px]"
+            />
         </PhoneMock>
         <div className="space-y-4">
           <h3 className="text-xl font-semibold">Buscador con filtros</h3>

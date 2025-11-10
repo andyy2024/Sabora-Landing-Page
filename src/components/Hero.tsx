@@ -9,32 +9,59 @@ export default function Hero() {
       </div>
 
       <div className="mx-auto max-w-7xl px-4 py-16 md:py-24 grid md:grid-cols-2 gap-10 items-center">
-        <div>
-          <h1 className="text-4xl md:text-5xl font-semibold tracking-tight text-zinc-900">
-            Reseñas reales de platos, cerca de ti.
-          </h1>
-          <p className="mt-4 text-zinc-600">
-            Sabora es la app tipo “letterbox” para restaurantes: descubre qué plato pedir con fotos verificadas y reseñas
-            con karma. Gratis, sin suscripciones, sustentada con anuncios.
-          </p>
-          <div className="mt-6 flex flex-wrap items-center gap-3">
-            <a
-              href="#download"
-              className="rounded-full bg-purple-600 text-white px-5 py-3 text-sm font-medium hover:bg-purple-700 transition"
-            >
-              Descargar APK
-            </a>
-            <a
-              href="#download"
-              className="rounded-full border border-purple-200 text-purple-700 px-5 py-3 text-sm font-medium hover:bg-purple-50 transition"
-            >
-              Abrir en Expo Go
-            </a>
+        <div className="relative">
+          {/* Background blur ellipse */}
+          <div
+            className="absolute inset-0 pointer-events-none z-0"
+          >
+            <div
+              className="
+              absolute
+              w-[170%] h-[160%]
+              rounded-[50%]
+              backdrop-blur-[5px]
+              bg-transparent
+              "
+              style={{
+                top: '-30%', // move down
+                left: '-35%', // move right
+                maskImage: 'radial-gradient(ellipse at center, black 40%, transparent 80%)',
+                WebkitMaskImage: 'radial-gradient(ellipse at center, black 40%, transparent 80%)',
+              }}
+            />
           </div>
-          <p className="mt-3 text-xs text-zinc-500">
-            Aún no disponible en App Store o Play Store.
-          </p>
+
+          {/* Foreground content */}
+          <div className="relative z-10">
+            <h1 className="text-4xl md:text-5xl font-semibold tracking-tight text-purple-800">
+              Reseñas reales de platos, cerca de ti.
+            </h1>
+            <p className="mt-4 text-zinc-600">
+              Sabora es la app tipo “letterbox” para restaurantes: descubre qué plato pedir con fotos verificadas y reseñas
+              con karma. Gratis, sin suscripciones, sustentada con anuncios.
+            </p>
+
+            <div className="mt-6 flex flex-wrap items-center gap-3">
+              <a
+                href="#download"
+                className="rounded-full bg-purple-600 text-white px-5 py-3 text-sm font-medium hover:bg-purple-700 transition"
+              >
+                Descargar APK
+              </a>
+              <a
+                href="#download"
+                className="rounded-full border border-purple-200 text-purple-700 px-5 py-3 text-sm font-medium hover:bg-purple-50 transition"
+              >
+                Abrir en Expo Go
+              </a>
+            </div>
+
+            <p className="mt-3 text-xs text-zinc-500">
+              Aún no disponible en App Store o Play Store.
+            </p>
+          </div>
         </div>
+
 
         <div className="flex justify-center">
           <PhoneMock label="Sabora">
